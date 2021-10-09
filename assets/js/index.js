@@ -1,5 +1,6 @@
 const carouselContainer = $("#carousel-container");
 const menuContainer = $("#menu-container");
+const checkoutBtn = $("#checkout-btn");
 
 const getDataFromApi = function () {
   const data = {
@@ -108,30 +109,33 @@ const renderCarousel = function (images) {
   carouselContainer.append(carousel);
 };
 
-const renderCards = function (menuItems) {
+const constructCards = function (menuItems) {
   // build card for each menu item
   const callback = function (each) {
     return `<div class="card food-card m-2">
-      <img
-        src=${each.imageUrl}
-        class="card-img-top"
-        alt="..."
-      />
-      <div class="card-body">
-        <h5 class="card-title">${each.title}</h5>
-        <h6 class="card-title">£ ${each.price}</h6>
-        <p class="card-text">
-          ${each.description}
-        </p>
-        <div class="d-grid gap-2">
-          <button class="btn btn-primary" id=${each.id} type="button">Add</button>
-        </div>
+    <img
+      src=${each.imageUrl}
+      class="card-img-top"
+      alt="..."
+    />
+    <div class="card-body">
+      <h5 class="card-title">${each.title}</h5>
+      <h6 class="card-title">£ ${each.price}</h6>
+      <p class="card-text">
+        ${each.description}
+      </p>
+      <div class="d-grid gap-2">
+        <button class="btn btn-primary" id=${each.id} type="button">Add</button>
       </div>
-    </div>`;
+    </div>
+  </div>`;
   };
 
-  const cards = menuItems.map(callback).join("");
+  return menuItems.map(callback).join("");
+};
 
+const renderCards = function (menuItems) {
+  const cards = constructCards(menuItems);
   menuContainer.append(cards);
 };
 
@@ -155,6 +159,7 @@ const initialiseLocalStorage = function (key, defaultValue) {
   // initialise LS
   const cart = JSON.parse(localStorage.getItem(key));
 
+  // if value does not exist in LS
   if (!cart) {
     localStorage.setItem(key, JSON.stringify(defaultValue));
   }
@@ -170,9 +175,37 @@ const getFromLocalStorage = function (key, defaultValue) {
   }
 };
 
+const renderCheckoutCounter = function (count) {
+  if (count > 0) {
+    // re render the badge with the count value
+    const badge = `<span
+      class="
+        position-absolute
+        top-0
+        start-100
+        translate-middle
+        badge
+        rounded-pill
+        bg-danger
+      "
+      id="cart-counter"
+    >
+    ${count}
+    </span>`;
+
+    checkoutBtn.append(badge);
+  }
+};
+
 const onReady = function () {
   // initialise LS
   initialiseLocalStorage("cart", []);
+
+  // get cart items from local storage
+  const cart = getFromLocalStorage("cart", []);
+
+  // render the checkout badge
+  renderCheckoutCounter(cart.length);
 
   // make an API call to get data
   const data = getDataFromApi();
@@ -191,12 +224,12 @@ const onReady = function () {
 
     if (target.is("button")) {
       const id = target.attr("id");
-      // filter my menu items and get the object
 
       const callback = function (each) {
         return each.id === parseInt(id);
       };
 
+      // find my menu item
       const menuItemToAdd = data.menu.find(callback);
 
       // add to LS
@@ -205,6 +238,9 @@ const onReady = function () {
       cart.push(menuItemToAdd);
 
       localStorage.setItem("cart", JSON.stringify(cart));
+
+      // re-render cart counter in checkout
+      renderCheckoutCounter(cart.length);
     }
   };
 

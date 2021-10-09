@@ -16,13 +16,20 @@
       href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;400;700&display=swap"
       rel="stylesheet"
     />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta2/css/all.min.css"
+      integrity="sha512-YWzhKL2whUzgiheMoBFwW8CKV4qpHQAEuvilg9FAn5VJUDwKZZxkJNuGM4XkWuk94WCrrwslk8yWNGmY1EduTA=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
     <link rel="stylesheet" href="./assets/css/styles.css" />
     <title>Just Ate | Home</title>
   </head>
   <body>
     <header>
       <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <div class="container-fluid">
+        <div class="container-fluid py-4">
           <a class="navbar-brand" href="#">Logo</a>
           <button
             class="navbar-toggler"
@@ -40,6 +47,15 @@
               <li class="nav-item">
                 <a class="nav-link active" aria-current="page" href="#">Home</a>
               </li>
+              <li class="nav-item">
+                <button
+                  type="button"
+                  class="btn position-relative"
+                  id="checkout-btn"
+                >
+                  <i class="fas fa-shopping-cart"></i>
+                </button>
+              </li>
             </ul>
           </div>
         </div>
@@ -47,15 +63,15 @@
     </header>
 
     <div class="container">
-      <!-- JUMBOTRON -->
-      <div class="m-3" id="carousel-container"></div>
+      <div class="m-3" id="carousel-container">
+        <!-- CAROUSEL GOES HERE -->
+      </div>
 
       <h1>My Restaurant</h1>
 
-      <div
-        class="d-flex justify-content-center flex-wrap"
-        id="menu-container"
-      ></div>
+      <div class="d-flex justify-content-center flex-wrap" id="menu-container">
+        <!-- MENU ITEMS GO HERE -->
+      </div>
     </div>
     <script
       src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.2/dist/js/bootstrap.bundle.min.js"
