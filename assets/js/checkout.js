@@ -1,4 +1,5 @@
 const shoppingBasketContainer = $("#shopping-basket-container");
+const totalContainer = $("#total-container");
 
 const getFromLocalStorage = function (key, defaultValue) {
   const localStorageData = JSON.parse(localStorage.getItem(key));
@@ -47,12 +48,50 @@ const renderShoppingBasket = function (cart) {
   shoppingBasketContainer.append(items);
 };
 
+const calculateTotal = function (cart) {
+  // calculate total
+  const callback = function (acc, each) {
+    return acc + each.price;
+  };
+  // return total
+  return cart.reduce(callback, 0);
+};
+
+const constructTotal = function (subTotal, tax = 20) {
+  // build component
+  // return component
+  const taxes = (subTotal * tax) / 100;
+  const total = subTotal + taxes;
+
+  return `<div class="jumbotron m-3 text-center">
+    <h1 class="display-4">Your total to pay</h1>
+    <p class="lead">SUBTOTAL: £${Math.floor(subTotal * 100) / 100}</p>
+    <p class="lead">TAXES: £${Math.floor(taxes * 100) / 100}</p>
+    <p class="lead">GRAND TOTAL: £${Math.floor(total * 100) / 100}</p>
+    <hr class="my-4" />
+  </div>`;
+};
+
+const renderTotal = function (cart) {
+  // calculate the total
+  const total = calculateTotal(cart);
+
+  // construct the total component
+  const totalComponent = constructTotal(total);
+
+  // append to HTML
+  totalContainer.append(totalComponent);
+};
+
 const onReady = function () {
   // get cart from LS
   const cart = getFromLocalStorage("cart", []);
 
   // render the shopping basket
   renderShoppingBasket(cart);
+
+  // render the total component
+  renderTotal(cart);
 };
 
 $(document).ready(onReady);
