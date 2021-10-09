@@ -247,4 +247,10 @@ const onReady = function () {
   $("#menu-container").on("click", addToCart);
 };
 
+const navigateToCheckout = function () {
+  location.assign("/checkout.html");
+};
+
+checkoutBtn.on("click", navigateToCheckout);
+
 $(document).ready(onReady);
